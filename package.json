@@ -1,0 +1,19 @@
+{
+  "name": "node-api-bootcamp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/igorvinnicius/node-api-bootcamp.git"
+  },
+  "author": "igorvinnicius",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/igorvinnicius/node-api-bootcamp/issues"
+  },
+  "homepage": "https://github.com/igorvinnicius/node-api-bootcamp#readme"
+}
