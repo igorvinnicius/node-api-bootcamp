@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/igorvinnicius/node-api-bootcamp/issues"
   },
-  "homepage": "https://github.com/igorvinnicius/node-api-bootcamp#readme"
+  "homepage": "https://github.com/igorvinnicius/node-api-bootcamp#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
