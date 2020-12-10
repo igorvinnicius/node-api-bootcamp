@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const feedRoutes = require('./routes/feed');
+const mongoose = require('mongoose');
 
 const app = express();
 
@@ -14,7 +15,12 @@ app.use((req, res, next) => {
     next();
 });
 
-// GET /feed/posts
 app.use('/feed', feedRoutes);
 
-app.listen(8080);
+mongoose.connect(
+    'mongodb+srv://igorvinnicius:pQiL9RFokLyzjqAD@cluster0.uyf4p.mongodb.net/node-bootcamp?retryWrites=true&w=majority'
+).then(result => {
+    app.listen(8080);
+})
+.catch(err => console.log(err));
+
