@@ -61,7 +61,7 @@ app.use((error, req, res, next) =>{
 });
 
 mongoose.connect(
-    'mongodb+srv://igorvinnicius:pQiL9RFokLyzjqAD@cluster0.uyf4p.mongodb.net/node-bootcamp?retryWrites=true&w=majority'
+    ''
 ).then(result => {
     app.listen(8080);
 })
