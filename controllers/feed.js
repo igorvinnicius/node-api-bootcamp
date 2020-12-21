@@ -21,57 +21,73 @@ exports.getPosts = (req, res, next) => {
     });    
 };
 
-exports.createPost = (req, res, next) => {
+exports.createPost = async (req, res, next) => {
     
     const errors = validationResult(req);
-
-    if(!errors.isEmpty()){
-        const error = new Error('Validation failed!');
-        error.statusCode = 422;
-       throw error;
+    
+    if (!errors.isEmpty()) {
+      const error = new Error('Validation failed, entered data is incorrect.');
+      error.statusCode = 422;
+      throw error;
+    }
+    
+    if (!req.file) {
+      const error = new Error('No image provided.');
+      error.statusCode = 422;
+      throw error;
     }
 
-    // if(!req.file){
-    //     const error = new Error('No image provided');
-    //     error.statusCode = 422;
-    //     throw error;
-    // }
-
+    const imageUrl = req.file.path;
     const title = req.body.title;
     const content = req.body.content;
-    //const imageUrl = req.file.path;
-    let creator;
-
     const post = new Post({
-        title: title, 
-        content: content,
-        imageUrl: 'images/image.jpg',
-        creator: req.userId
+      title: title,
+      content: content,
+      imageUrl: imageUrl,
+      creator: req.userId
     });
-    
-    post.save()
-    .then(result => { 
-        return User.findById(req.userId)
-    })    
-    .then(user => {        
-        creator = user;
+
+    try {
+      
+        await post.save();
+        const user = await User.findById(req.userId);
         user.posts.push(post);
-        return user.save();        
-    })
-    .then(result => {
+        const savedUser = await user.save();
+      
         res.status(201).json({
-            message: "Post created successfully!",
-            post: post, 
-            creator: { id: creator._id, name: creator.name }
+            message: 'Post created successfully!',
+            post: post,
+            creator: { _id: user._id, name: user.name }
         });
-    })
-    .catch(err => {
-        if(!err.statusCode){
-            err.statusCode = 500;
-        }
-        next(err)
-    });    
-};
+
+      return savedUser;
+    } catch (err) {
+      
+        if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+
+      next(err);
+    }
+  };
+  
+  exports.getPost = async (req, res, next) => {
+    const postId = req.params.postId;
+    const post = await Post.findById(postId);
+    try {
+      if (!post) {
+        const error = new Error('Could not find post.');
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json({ message: 'Post fetched.', post: post });
+    } catch (err) {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    }
+  };
 
 exports.getPost = (req, res, next) => {
     
